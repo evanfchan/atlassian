@@ -1,0 +1,27 @@
+import com.atlassian.jira.component.ComponentAccessor;
+import com.atlassian.jira.issue.CustomFieldManager;
+import com.atlassian.jira.issue.fields.CustomField;
+import com.atlassian.jira.issue.Issue;
+CustomFieldManager customFieldManager = ComponentAccessor.getCustomFieldManager();
+CustomField epicLink = customFieldManager.getCustomFieldObjectByName('Epic Link');
+CustomField epicName = customFieldManager.getCustomFieldObjectByName('Epic Name');
+//This is where we store the issue that is linked to the epic.
+Issue issue_linked_to_epic
+/* determine if this is an epic, if so, return the epic link name */
+if (issue.issueTypeObject.name == "Epic"){
+	return issue.getCustomFieldValue(epicName)
+}
+/*determine if this is a subTaskIssueTypes(), if so, set the parent to the issue linked to the epic */
+Issue issueParent = issue.getParentObject()
+if (issueParent == null){
+	issue_linked_to_epic = issue
+} else {
+	issue_linked_to_epic = issueParent
+}
+/* get epic link */
+Issue epic = (Issue) issue_linked_to_epic.getCustomFieldValue(epicLink)
+if (epic == null){
+	return null
+}
+String epicNameString = epic.getCustomFieldValue(epicName)
+return epicNameString
